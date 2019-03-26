@@ -1,0 +1,46 @@
+# seed 992
+timestep 100e-6
+steps 80000000
+temperature 300
+
+outputPeriod 10000
+outputEnergyPeriod 10000
+decompPeriod 1000000
+outputFormat dcd
+
+cutoff 100.0
+pairlistDistance 5
+
+## dummy CG bead to make engine happy
+particle dum
+num 1
+diffusion 1
+gridFile null.dx
+tabulatedPotential  1
+tabulatedFile 0@0@flat.dat
+
+## Rigid Body cytochrome c2
+rigidBody cyt
+num 100
+mass 13236.6
+inertia 2052792.5 1733386.8 1324935.1
+transDamping 1.75e3 1.68e3 1.64e3
+rotDamping   6.65e3 7.05e3 8.21e3
+
+densityGrid elec ../1-setup/cytc2.charge.fixed.dx
+densityGrid vdwH ../1-setup/cytc2.vdw-den.H.dx
+densityGrid vdwO ../1-setup/cytc2.vdw-den.O-N.dx
+densityGrid vdwC ../1-setup/cytc2.vdw-den.C-S.dx
+
+gridFile elec Elect_pH7_avg_Salinity0.15_red_smooth.dx
+gridFile vdwH ../1-setup/smooth_chromatophore.vdw-pot.H.dx
+gridFile vdwO ../1-setup/smooth_chromatophore.vdw-pot.O-N.dx
+gridFile vdwC ../1-setup/smooth_chromatophore.vdw-pot.C-S.dx
+
+pmfScale elec 0.57827709
+pmfScale vdwH 0.59616195
+pmfScale vdwO 0.59616195
+pmfScale vdwC 0.59616195
+
+# posX posY posZ rotXX rotXY rotXZ rotYX rotYY rotYZ  rotZX rotZY rotZZ
+inputRBCoordinates coords-7-0.15_red.txt

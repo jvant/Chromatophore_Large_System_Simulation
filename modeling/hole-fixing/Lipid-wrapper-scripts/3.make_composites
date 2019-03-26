@@ -1,0 +1,42 @@
+# do the first one
+cat orig_system.lipid_centered.fixed.lipids_and_protein.pdb lipids1.pdb.fixed.pdb | grep "^ATOM" > tmp.pdb
+cat __3.make_composites.tcl.template | sed "s/MOOSE/A/g" > tmp.tcl
+/scratch/Programs/vmd_big/bin/vmd -dispdev text -e tmp.tcl
+
+# now the second one
+cp tmp2.pdb filler1.pdb
+cat orig_system.lipid_centered.fixed.lipids_and_protein.pdb filler?.pdb | sed "s/.HL1/CHL1/g" | sed "s/.SPS/DSPS/g" | sed "s/.OPC/POPC/g" | sed "s/.OPE/POPE/g" | grep "^ATOM" > tmp.pdb
+cat lipids2.pdb.fixed.pdb >> tmp.pdb
+cat __3.make_composites.tcl.template | sed "s/MOOSE/B/g" > tmp.tcl
+/scratch/Programs/vmd_big/bin/vmd -dispdev text -e tmp.tcl
+
+# now the third one
+cp tmp2.pdb filler2.pdb
+cat orig_system.lipid_centered.fixed.lipids_and_protein.pdb filler?.pdb  | sed "s/.HL1/CHL1/g" | sed "s/.SPS/DSPS/g" | sed "s/.OPC/POPC/g" | sed "s/.OPE/POPE/g" | grep "^ATOM" > tmp.pdb
+cat lipids3.pdb.fixed.pdb >> tmp.pdb
+cat __3.make_composites.tcl.template | sed "s/MOOSE/X/g" > tmp.tcl
+/scratch/Programs/vmd_big/bin/vmd -dispdev text -e tmp.tcl
+
+# now the fourth one
+cp tmp2.pdb filler3.pdb
+cat orig_system.lipid_centered.fixed.lipids_and_protein.pdb filler?.pdb  | sed "s/.HL1/CHL1/g" | sed "s/.SPS/DSPS/g" | sed "s/.OPC/POPC/g" | sed "s/.OPE/POPE/g" | grep "^ATOM" > tmp.pdb
+cat lipids4.pdb.fixed.pdb >> tmp.pdb
+cat __3.make_composites.tcl.template | sed "s/MOOSE/Y/g" > tmp.tcl
+/scratch/Programs/vmd_big/bin/vmd -dispdev text -e tmp.tcl
+
+# now the fifth one
+cp tmp2.pdb filler4.pdb
+cat orig_system.lipid_centered.fixed.lipids_and_protein.pdb filler?.pdb  | sed "s/.HL1/CHL1/g" | sed "s/.SPS/DSPS/g" | sed "s/.OPC/POPC/g" | sed "s/.OPE/POPE/g" | grep "^ATOM" > tmp.pdb
+cat lipids5.pdb.fixed.pdb >> tmp.pdb
+cat __3.make_composites.tcl.template | sed "s/MOOSE/E/g" > tmp.tcl
+/scratch/Programs/vmd_big/bin/vmd -dispdev text -e tmp.tcl
+
+# now the sixth one
+cp tmp2.pdb filler5.pdb
+cat orig_system.lipid_centered.fixed.lipids_and_protein.pdb filler?.pdb  | sed "s/.HL1/CHL1/g" | sed "s/.SPS/DSPS/g" | sed "s/.OPC/POPC/g" | sed "s/.OPE/POPE/g" | grep "^ATOM" > tmp.pdb
+cat lipids6.pdb.fixed.pdb >> tmp.pdb
+cat __3.make_composites.tcl.template | sed "s/MOOSE/F/g" > tmp.tcl
+/scratch/Programs/vmd_big/bin/vmd -dispdev text -e tmp.tcl
+
+cp tmp2.pdb filler6.pdb
+

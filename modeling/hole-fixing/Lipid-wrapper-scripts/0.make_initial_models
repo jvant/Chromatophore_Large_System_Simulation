@@ -1,0 +1,12 @@
+# first, center models around lipids and save different components
+/scratch/Programs/vmd_big/bin/vmd -dispdev text -e __0.center_and_save.tcl
+
+# fix the indexing and such
+pypy __0.fix_resnames_and_indexing.py > orig_system.lipid_centered.fixed.pdb
+
+# separate different parts
+cat orig_system.lipid_centered.fixed.pdb | sed "s/CHL1/C?L1/g" | sed "s/POPC/?OPC/g" | sed "s/POPE/?OPE/g" | sed "s/POPG/?OPG/g" | sed "s/POPE/?OPE/g" | sed "s/DSPS/DS?S/g" | grep "?" | sed "s/C?L1/CHL1/g" | sed "s/?/P/g" > orig_system.lipid_centered.fixed.just_lipids.pdb
+
+cat orig_system.lipid_centered.fixed.pdb | sed "s/SOD SOD/SOD?SOD/g" | sed "s/CLA CLA/CLA?CLA/g" | sed "s/TIP3/T?P3/g" | grep "?" | sed "s/T?P3/TIP3/g" | sed "s/?/ /g" > orig_system.lipid_centered.fixed.water_ions.pdb
+
+cat orig_system.lipid_centered.fixed.pdb | sed "s/SOD SOD/SOD?SOD/g" | sed "s/CLA CLA/CLA?CLA/g" | sed "s/TIP3/T?P3/g" | grep -v "?" > orig_system.lipid_centered.fixed.lipids_and_protein.pdb

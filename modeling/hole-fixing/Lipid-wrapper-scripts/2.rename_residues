@@ -1,0 +1,8 @@
+./__2.rename_residues.helper lipids1.pdb A &
+./__2.rename_residues.helper lipids2.pdb B &
+./__2.rename_residues.helper lipids3.pdb X &
+./__2.rename_residues.helper lipids4.pdb Y &
+./__2.rename_residues.helper lipids5.pdb E &
+./__2.rename_residues.helper lipids6.pdb F
+
+echo Might not be done. Check processor usage.

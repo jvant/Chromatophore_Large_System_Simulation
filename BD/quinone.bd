@@ -1,0 +1,20 @@
+# seed 992
+timestep 100e-6
+steps 5000000000
+temperature 300
+
+outputPeriod 10000
+outputEnergyPeriod 10000
+decompPeriod 1000000
+outputFormat dcd
+
+cutoff 100.0
+pairlistDistance 5
+
+## CG bead so code doesn't crash
+particle quinone
+num 5000
+diffusion 7.7
+gridFile 2-potential.dx
+
+tabulatedPotential  1

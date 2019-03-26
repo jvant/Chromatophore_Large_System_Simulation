@@ -1,0 +1,83 @@
+#############################################################
+## JOB DESCRIPTION                                         ##
+#############################################################
+# generate compressed psf
+#############################################################
+## ADJUSTABLE PARAMETERS                                   ##
+#############################################################
+
+genCompressedPsf on 
+#useCompressedPsf on
+
+usePluginIO                 yes
+structure                   chromatophore-waterbox-2015-09-16-ionized.js 
+bincoordinates              chromatophore-waterbox-2015-09-16-ionized.coor  
+firsttimestep               0  
+set temperature             310
+
+# Output
+outputName                  00-chromatophore-waterbox-2015-09-16-ionized-compress
+##############################################################
+## SIMULATION PARAMETERS                                    ##
+##############################################################
+
+# Input
+paraTypeCharmm          on
+parameters              parameters/par_all36_lipid.prm
+parameters              parameters/par_all36_prot.prm 
+parameters              parameters/cofactors.par
+parameters              parameters/rhodopin-glucoside.par
+parameters              parameters/SI2_CHARMM_parameter_file.prm
+
+temperature             $temperature
+
+# Force-Field Parameters
+exclude             scaled1-4
+1-4scaling          1.0
+cutoff              12.
+switching           on
+switchdist          10.
+pairlistdist        12.5
+
+# Integrator Parameters
+timestep            1.0 
+rigidBonds          water
+nonbondedFreq       1
+fullElectFrequency  2 
+stepspercycle       10
+
+# Periodic Boundary Conditions
+#cellBasisVector1     sqrt(3)*a      0        0     /\   <-- orientation
+#cellBasisVector2   (sqrt(3)/2)*a  (3/2)*a    0    |  |       of hexagon
+#cellBasisVector3        0           0        b     \/     of side length a
+# a=600 for this patch
+
+cellBasisVector1     1000     0.0      0.0
+cellBasisVector2      0.0   1000.0      0.0
+cellBasisVector3        0.0     0.0   1000.0
+cellOrigin          -0.21645791828632355 48.83677291870117 -1.0212202072143555 
+
+wrapNearest         off
+wrapWater           on
+wrapAll             on
+
+PME                 yes
+PMEGridSpacing      1.0
+
+# Constant Pressure Control (variable volume)
+useGroupPressure    yes
+useFlexibleCell     no
+useConstantArea     no
+
+restartfreq         1000
+dcdfreq             1000
+xstFreq             1000
+outputEnergies      100
+outputPressure      100
+
+#############################################################
+## EXECUTION SCRIPT                                        ##
+#############################################################
+
+reinitvels $temperature
+run 1

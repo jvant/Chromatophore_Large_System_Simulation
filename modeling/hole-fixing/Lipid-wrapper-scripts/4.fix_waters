@@ -1,0 +1,29 @@
+# first thing to do is to fill in the vacum bubbles.
+#python __4.fix_waters.fill_bubbles_with_water.py
+
+rm ./4.fix_waters_bubble_segs/*fixed*pdb
+cat filler?.pdb orig_system.lipid_centered.fixed.just_lipids.pdb orig_system.lipid_centered.fixed.water_ions.pdb ./4.fix_waters_bubble_segs/*pdb | grep "^ATOM" | sed "s/ .HL1/ CHL1/g" | sed "s/ .OPC/ POPC/g" | sed "s/ .OPE/ POPE/g" | sed "s/ .SPS/ DSPS/g"  > tmp.pdb
+
+# tmp.pdb does have missing water
+
+echo BE SURE TO MODIFY __4.fix_waters.tcl AS NEEDED FOR NEW SYSTEM!!!!
+
+/scratch/Programs/vmd_big/bin/vmd -dispdev text -e __4.fix_waters.tcl
+
+quit
+stop
+exit
+
+
+# now take these waters and separate them into segments
+rm -r 4.fix_waters_segs
+mkdir 4.fix_waters_segs
+
+cat tmp2.pdb  | grep "^ATOM"  | awk '{print substr($0,73,4)}' | uniq | sort | uniq > tmp3.unique_segs
+cat tmp3.unique_segs | awk '{print "grep \"" $1 "[ ]*$\" tmp2.pdb > ./4.fix_waters_segs/" $1 ".pdb"}' > t
+python /home/jdurrant/multiprocess.py.bak t 24
+
+# fix waters (reindex and such)
+ls 4.fix_waters_segs/*pdb 4.fix_waters_bubble_segs/*.pdb | awk '{print "python __4.fix_waters.py " $1}' > t
+python /home/jdurrant/multiprocess.py.bak t 24
+

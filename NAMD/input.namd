@@ -1,0 +1,138 @@
+#############################################################
+## JOB DESCRIPTION                                         ##
+#############################################################
+# velocity quench minimization
+#############################################################
+## ADJUSTABLE PARAMETERS                                   ##
+#############################################################
+proc get_first_ts { xscfile } {
+  set fd [open $xscfile r]
+  gets $fd
+  gets $fd
+  gets $fd line
+  set ts [lindex $line 0]
+  close $fd
+  return $ts
+}
+
+useCompressedPsf   on
+structure                   chromatophore-waterbox-2015-09-16-ionized.js.inter 
+#bincoordinates              chromatophore-waterbox-2015-09-16-ionized.coor 
+ 
+
+
+set outputname      output
+#set inputname      
+
+bincoordinates     $inputname.restart.coor.old
+binvelocities      $inputname.restart.vel.old
+extendedSystem     $inputname.restart.xsc.old
+
+firsttimestep               0
+set temperature             300
+
+# Below specific to simulated system
+#maxExclusionFlags 2000
+#maxSelfPart 1
+#maxPairPart 1
+
+#ldbStrategy none
+#firstLdbStep  10000
+#ldbPeriod 100000
+
+##############################################################
+## SIMULATION PARAMETERS                                    ##
+##############################################################
+
+# Input
+paraTypeCharmm      on
+parameters              parameters/par_all36_lipid.prm
+parameters              parameters/par_all36_prot.prm
+parameters              parameters/cofactors.par
+parameters              parameters/rhodopin-glucoside.par
+parameters              parameters/SI2_CHARMM_parameter_file.prm
+
+#temperature         $temperature
+
+# Force-Field Parameters
+exclude             scaled1-4
+1-4scaling          1.0
+cutoff              12.0
+switching           on
+switchdist          10.0
+pairlistdist        12.5
+
+# Integrator Parameters
+timestep            1.0 
+rigidBonds          water
+nonbondedFreq       1
+fullElectFrequency  2 
+stepspercycle       20
+margin              6
+
+# Periodic Boundary Conditions
+#cellBasisVector1     sqrt(3)*a      0        0     /\   <-- orientation
+#cellBasisVector2   (sqrt(3)/2)*a  (3/2)*a    0    |  |       of hexagon
+#cellBasisVector3        0           0        b     \/     of side length a
+# a=600 for this patch
+
+ 
+cellBasisVector1      866.02     0.0      0.0
+cellBasisVector2      433.012    750.0    0.0
+cellBasisVector3        0.0     0.0    1000.0
+cellOrigin          -1.3095 101.32213 -1.0729
+wrapNearest         on
+wrapWater           on
+wrapAll             on
+
+PME                 yes
+PMEGridSpacing      1.0
+
+
+langevin              on    # do langevin dynamics
+langevinDamping       1     # damping coefficient (gamma) of 1/ps
+langevinHydrogen      off   # don't couple langevin bath to hydrogens
+langevinTemp          $temperature
+
+if {1} {
+useGroupPressure        no 
+useFlexibleCell         no
+langevinPiston        on
+langevinPistonTarget  1.01325
+langevinPistonPeriod  100
+langevinPistonDecay   50
+langevinPistonTemp    $temperature
+}
+
+# output
+outputName          $outputname
+restartfreq         1000
+dcdfreq             10000
+xstFreq             1000
+outputEnergies      100
+outputPressure      100
+outputTiming        100
+
+fixedAtoms                  off 
+fixedAtomListFile           fixed.txt
+
+###########MDFF parameters###########
+
+if {0} {
+  gridForce               on
+  gridforcechecksize      off
+  gridForceFile           NVT-gridpdb.pdb 
+  gridForceCol            O
+  gridForceChargeCol      B
+  gridForcePotFile        NVT.dx  
+  gridForceScale          1.0 1.0 1.0 
+}
+
+#############################################################
+## EXECUTION SCRIPT                                        ##
+#############################################################
+#minimize 5000
+#maximumMove 0.2
+#velocityQuenching on
+run 50000000
+

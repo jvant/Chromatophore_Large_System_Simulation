@@ -1,0 +1,1 @@
+cat 5019_min_200000_prod_all.fixed.lipid_centered.really_fixed.pdb.gz | gunzip | sed "s/TIP3/T=P3/g" | sed "s/CLA CLA/C=A CLA/g" | sed "s/SOD SOD/S=D SOD/g" | grep "=" | sed "s/T=P3/TIP3/g" | sed "s/C=A/CLA/g" | sed "s/S=D/SOD/g" > 5019_min_200000_prod_all.fixed.lipid_centered.really_fixed.water_ions.pdb
